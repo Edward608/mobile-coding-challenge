@@ -6,12 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Path
 
-const val BASE_URL = "https://listen-api-test.listennotes.com/api/v2"
+const val BASE_URL = "https://listen-api-test.listennotes.com/"
 
 interface PodcastApi {
-    @GET("/best_podcasts")
+    @GET("/api/v2/best_podcasts")
     suspend fun getBestPodcasts(@Query("page") page: Int): Result<PodcastListApiModel>
 
-    @GET("/podcasts/{id}")
+    @GET("/api/v2/podcasts/{id}")
     suspend fun getPodcast(@Path("id") id: String): Result<PodcastApiModel>
 }
