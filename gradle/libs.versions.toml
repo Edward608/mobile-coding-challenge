@@ -15,7 +15,7 @@ hilt = "2.51.1"
 
 retrofit = "2.11.0"
 retrofit-result-adapter = "1.0.13"
-coilVersion = "2.6.0"
+coilVersion = "3.0.4"
 okHttp3LoggingVersion = "5.0.0-alpha.2"
 moshi = "1.15.1"
 
@@ -41,7 +41,9 @@ compose-navigation = { group = "androidx.navigation", name = "navigation-compose
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
-coil-image-loading = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilVersion" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilVersion" }
+coil-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilVersion" }
+coil-test = { group = "io.coil-kt.coil3", name = "coil-test", version.ref = "coilVersion" }
 
 okhttp3-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp3LoggingVersion" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }

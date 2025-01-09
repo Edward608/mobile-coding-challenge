@@ -1,6 +1,5 @@
 package com.edwardwongtl.podcastchallenge.ui.podcastlist
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,13 +13,20 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.AsyncImagePreviewHandler
+import coil3.compose.LocalAsyncImagePreviewHandler
+import coil3.test.FakeImage
 import com.edwardwongtl.podcastchallenge.domain.model.PodcastModel
 import com.edwardwongtl.podcastchallenge.ui.theme.PodcastChallengeTheme
 
@@ -76,12 +82,21 @@ fun PodcastListItem(
         )
 
         Column(modifier = Modifier.padding(8.dp)) {
-            Text(text = podcast.title)
-            Text(text = podcast.publisher)
+            Text(
+                text = podcast.title,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Text(
+                text = podcast.publisher,
+                color = Color.LightGray,
+                fontStyle = FontStyle.Italic,
+            )
         }
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun PodcastListPreview() {
@@ -95,9 +110,15 @@ private fun PodcastListPreview() {
         }
     )
 
+    val previewHandler = AsyncImagePreviewHandler {
+        FakeImage()
+    }
+
     PodcastChallengeTheme {
-        Scaffold { innerPadding ->
-            PodcastListUI(state, modifier = Modifier.padding(innerPadding))
+        CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
+            Scaffold { innerPadding ->
+                PodcastListUI(state, modifier = Modifier.padding(innerPadding))
+            }
         }
     }
 }
