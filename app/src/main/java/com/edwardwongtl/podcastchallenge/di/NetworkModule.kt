@@ -3,6 +3,7 @@ package com.edwardwongtl.podcastchallenge.di
 import com.edwardwongtl.podcastchallenge.BuildConfig
 import com.edwardwongtl.podcastchallenge.data.api.BASE_URL
 import com.edwardwongtl.podcastchallenge.data.api.PodcastApi
+import com.skydoves.retrofit.adapters.result.ResultCallAdapterFactory
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -34,6 +35,8 @@ object NetworkModule {
     ): Retrofit = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
+        // Add call adapter to convert Retrofit response to Kotlin Result, default on IO scope
+        .addCallAdapterFactory(ResultCallAdapterFactory.create())
         .baseUrl(BASE_URL)
         .build()
 

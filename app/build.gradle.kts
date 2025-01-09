@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi.converter)
+    implementation(libs.retrofit.result.adapter)
     implementation(libs.moshi.core)
     ksp(libs.moshi.codegen)
     implementation(libs.okhttp3.logging )
