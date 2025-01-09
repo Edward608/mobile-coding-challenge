@@ -1,14 +1,18 @@
 package com.edwardwongtl.podcastchallenge.ui.podcastlist
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -16,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -41,6 +46,7 @@ fun PodcastListPage(
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
+
     PodcastListUI(state.value, modifier)
 
     state.value.error?.let {
@@ -55,6 +61,17 @@ fun PodcastListUI(
     state: PodcastListState,
     modifier: Modifier = Modifier,
 ) {
+    if (state.isLoading) {
+        Box(modifier = modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .widthIn(min = 36.dp, max = 100.dp)
+                    .aspectRatio(1f)
+                    .align(Alignment.Center)
+            )
+        }
+    }
+
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()

@@ -17,15 +17,15 @@ class PodcastListViewModel @Inject constructor(
         getPodcasts()
     }
 
-    private val _state = MutableStateFlow<PodcastListState>(PodcastListState())
+    private val _state = MutableStateFlow<PodcastListState>(PodcastListState(isLoading = true))
     val state: StateFlow<PodcastListState> = _state
 
     fun getPodcasts() {
         viewModelScope.launch {
             // Page number is not relevant here since mock server's return data are hardcoded
             podcastRepository.getBestPodcasts(0)
-                .onSuccess { _state.value = _state.value.copy(podcasts = it) }
-                .onFailure { _state.value = _state.value.copy(error = it) }
+                .onSuccess { _state.value = PodcastListState(podcasts = it) }
+                .onFailure { _state.value = PodcastListState(error = it) }
         }
     }
 }
