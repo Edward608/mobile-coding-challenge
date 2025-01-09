@@ -11,9 +11,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -22,21 +24,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.test.FakeImage
 import com.edwardwongtl.podcastchallenge.domain.model.PodcastModel
 import com.edwardwongtl.podcastchallenge.ui.theme.PodcastChallengeTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun PodcastListPage(
     viewModel: PodcastListViewModel,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
     PodcastListUI(state.value, modifier)
+
+    state.value.error?.let {
+        scope.launch {
+            snackbarHostState.showSnackbar(it.message.orEmpty())
+        }
+    }
 }
 
 @Composable

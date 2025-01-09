@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
             PodcastChallengeTheme {
                 val navController = rememberNavController()
                 var pageTitle by remember { mutableStateOf("Podcasts") }
+                val snackbarHostState = remember { SnackbarHostState() }
 
                 Scaffold(
                     topBar = {
@@ -42,14 +45,19 @@ class MainActivity : ComponentActivity() {
                             title = { Text(pageTitle) },
                         )
                     },
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
 
                     NavHost(navController, startDestination = NavDestination.PodcastList) {
                         composable<NavDestination.PodcastList> {
                             pageTitle = "Podcasts"
-                            val viewmodel:PodcastListViewModel by viewModels()
-                            PodcastListPage(viewmodel, Modifier.padding(innerPadding))
+                            val viewmodel: PodcastListViewModel by viewModels()
+                            PodcastListPage(
+                                viewmodel,
+                                snackbarHostState,
+                                Modifier.padding(innerPadding),
+                            )
                         }
                     }
                 }
