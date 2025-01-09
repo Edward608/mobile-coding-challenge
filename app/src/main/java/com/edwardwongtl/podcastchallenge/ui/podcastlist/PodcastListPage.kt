@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,10 +12,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
@@ -75,7 +76,7 @@ fun PodcastListUI(
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 8.dp)
     ) {
         itemsIndexed<PodcastModel>(
             items = state.podcasts,
@@ -124,7 +125,7 @@ fun PodcastListItem(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun PodcastListPreview() {
@@ -144,7 +145,18 @@ private fun PodcastListPreview() {
 
     PodcastChallengeTheme {
         CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
-            Scaffold { innerPadding ->
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                "Podcasts",
+                                fontWeight = FontWeight.Bold,
+                            )
+                        },
+                    )
+                },
+            ) { innerPadding ->
                 PodcastListUI(state, modifier = Modifier.padding(innerPadding))
             }
         }

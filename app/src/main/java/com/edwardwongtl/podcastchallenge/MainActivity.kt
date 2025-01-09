@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -42,7 +43,12 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { Text(pageTitle) },
+                            title = {
+                                Text(
+                                    pageTitle,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            },
                         )
                     },
                     snackbarHost = { SnackbarHost(snackbarHostState) },
