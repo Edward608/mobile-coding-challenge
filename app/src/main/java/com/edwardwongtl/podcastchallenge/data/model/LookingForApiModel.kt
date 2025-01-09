@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class LookingForApiModel(
-    val guests: Boolean = false,
-    val cohosts: Boolean = false,
-    val sponsors: Boolean = false,
-    @Json(name = "cross_promotion") val crossPromotion: Boolean = false
+    val guests: Boolean,
+    val cohosts: Boolean,
+    val sponsors: Boolean,
+    @Json(name = "cross_promotion") val crossPromotion: Boolean
 )

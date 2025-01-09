@@ -16,6 +16,7 @@ data class PodcastApiModel(
     val website: String,
     @Json(name="genre_ids") val genreIds: List<Int>,
     @Json(name="itunes_id") val itunesId: Int,
+    val publisher: String,
     val thumbnail: String,
     @Json(name = "is_claimed") val isClaimed: Boolean,
     val description: String,
