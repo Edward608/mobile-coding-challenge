@@ -1,5 +1,6 @@
 package com.edwardwongtl.podcastchallenge.ui.podcastlist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +16,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,50 +45,74 @@ import kotlinx.coroutines.launch
 @Composable
 fun PodcastListPage(
     viewModel: PodcastListViewModel,
-    snackbarHostState: SnackbarHostState,
+    onClick: (PodcastModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
 
-    PodcastListUI(state.value, modifier)
-
-    state.value.error?.let {
-        scope.launch {
-            snackbarHostState.showSnackbar(it.message.orEmpty())
-        }
-    }
+    PodcastListUI(state.value, onClick, modifier)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PodcastListUI(
     state: PodcastListState,
+    onClick: (PodcastModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.isLoading) {
-        Box(modifier = modifier.fillMaxSize()) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .widthIn(min = 36.dp, max = 100.dp)
-                    .aspectRatio(1f)
-                    .align(Alignment.Center)
-            )
-        }
-    }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-    ) {
-        itemsIndexed<PodcastModel>(
-            items = state.podcasts,
-            key = { _, podcast -> podcast.id },
-            contentType = { _, _ -> "podcast" }
-        ) { index, podcast ->
-            PodcastListItem(podcast)
-            if (index < state.podcasts.lastIndex) {
-                HorizontalDivider()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Podcasts",
+                        fontWeight = FontWeight.Bold,
+                    )
+                },
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
+        state.error?.let {
+            scope.launch {
+                snackbarHostState.showSnackbar(it.message.orEmpty())
+            }
+        }
+
+        if (state.isLoading) {
+            Box(
+                modifier = modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .widthIn(min = 36.dp, max = 100.dp)
+                        .aspectRatio(1f)
+                        .align(Alignment.Center)
+                )
+            }
+        }
+
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(innerPadding)
+                .padding(horizontal = 8.dp)
+        ) {
+            itemsIndexed<PodcastModel>(
+                items = state.podcasts,
+                key = { _, podcast -> podcast.id },
+                contentType = { _, _ -> "podcast" }
+            ) { index, podcast ->
+                PodcastListItem(podcast, onClick)
+                if (index < state.podcasts.lastIndex) {
+                    HorizontalDivider()
+                }
             }
         }
     }
@@ -94,15 +121,17 @@ fun PodcastListUI(
 @Composable
 fun PodcastListItem(
     podcast: PodcastModel,
+    onClick: (PodcastModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickable { onClick(podcast) }
     ) {
         AsyncImage(
             model = podcast.thumbnail,
-            contentDescription = podcast.title,
+            contentDescription = "Thumbnail of ${podcast.title}",
             modifier = Modifier
                 .widthIn(min = 40.dp, max = 120.dp)
                 .aspectRatio(1f)
@@ -145,20 +174,10 @@ private fun PodcastListPreview() {
 
     PodcastChallengeTheme {
         CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                "Podcasts",
-                                fontWeight = FontWeight.Bold,
-                            )
-                        },
-                    )
-                },
-            ) { innerPadding ->
-                PodcastListUI(state, modifier = Modifier.padding(innerPadding))
-            }
+            PodcastListUI(
+                state,
+                onClick = {},
+            )
         }
     }
 }
