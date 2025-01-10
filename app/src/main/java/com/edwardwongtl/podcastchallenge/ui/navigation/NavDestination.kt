@@ -6,4 +6,7 @@ import kotlinx.serialization.Serializable
 sealed class NavDestination(val route: String) {
     @Serializable
     object PodcastList : NavDestination("podcastList")
+
+    @Serializable
+    data class PodcastDetail(val podcastId: String): NavDestination("podcastDetail/$podcastId")
 }
