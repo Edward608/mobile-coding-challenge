@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.compose.navigation)
 
     implementation(libs.hilt)
+    implementation(libs.hilt.compose)
     ksp(libs.hilt.compiler)
 
     implementation(libs.coil.compose)
