@@ -31,7 +31,7 @@ class PodcastRepository @Inject constructor(
             val response = podcastApi.getPodcast(podcastId)
             response.map { podcast ->
                 podcast.toModel().copy(
-                    isFavourite = sharedPreferences.getBoolean(podcast.id, false)
+                    isFavourite = sharedPreferences.getBoolean(podcastId, false)
                 )
             }
         } catch (e: Exception) {
@@ -41,5 +41,11 @@ class PodcastRepository @Inject constructor(
 
     fun setFavourite(podcastId: String, isFavourite: Boolean) {
         sharedPreferences.edit().putBoolean(podcastId, isFavourite).apply()
+    }
+
+    fun getFavourites(podcastIds: List<String>): Map<String, Boolean> {
+        return podcastIds.map {
+            it to sharedPreferences.getBoolean(it, false)
+        }.toMap()
     }
 }

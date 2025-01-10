@@ -28,4 +28,16 @@ class PodcastListViewModel @Inject constructor(
                 .onFailure { _state.value = PodcastListState(error = it) }
         }
     }
+
+    fun updateFavourites() {
+        val podcasts = state.value.podcasts
+        val favList = podcastRepository.getFavourites(podcasts.map { it.id })
+        _state.value = _state.value.copy(
+            podcasts = podcasts.map { podcast ->
+                podcast.copy(
+                    isFavourite = favList[podcast.id] == true
+                )
+            }
+        )
+    }
 }

@@ -57,7 +57,7 @@ fun PodcastDetailPage(
 
     PodcastDetailUI(
         state.value,
-        viewModel::setFavourite,
+        viewModel::toggleFavourite,
         { navController.popBackStack() },
         modifier
     )
@@ -66,7 +66,7 @@ fun PodcastDetailPage(
 @Composable
 fun PodcastDetailUI(
     state: PodcastDetailState,
-    setFavourite: (Boolean) -> Unit,
+    toggleFavourite: () -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -150,7 +150,7 @@ fun PodcastDetailUI(
             )
 
             Button(
-                onClick = { setFavourite(!state.podcast.isFavourite) },
+                onClick = { toggleFavourite() },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FavouritePink
@@ -198,7 +198,7 @@ private fun PodcastDetailPreview() {
         CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
             PodcastDetailUI(
                 state = state,
-                setFavourite = {},
+                toggleFavourite = {},
                 onNavigateBack = {},
             )
         }
