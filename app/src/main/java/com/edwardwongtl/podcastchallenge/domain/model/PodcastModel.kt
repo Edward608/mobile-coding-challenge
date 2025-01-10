@@ -31,6 +31,7 @@ data class PodcastModel(
     val hasGuestInterviews: Boolean = false,
     val updateFrequencyHours: Int = 0,
     val listenScoreGlobalRank: String = "",
+    val isFavourite: Boolean = false,
 )
 
 fun PodcastApiModel.toModel() = PodcastModel(

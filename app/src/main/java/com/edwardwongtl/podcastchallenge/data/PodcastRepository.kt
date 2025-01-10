@@ -9,13 +9,22 @@ class PodcastRepository @Inject constructor(
     private val podcastApi: PodcastApi
 ) {
     suspend fun getBestPodcasts(page: Int): Result<List<PodcastModel>> {
-        try {
+        return try {
             val response = podcastApi.getBestPodcasts(page)
-            return response.map {
+            response.map {
                 it.podcasts.map { it.toModel() }
             }
         } catch (e: Exception) {
-            return Result.failure(e)
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getPodcastDetail(podcastId: String): Result<PodcastModel> {
+        return try {
+            val response = podcastApi.getPodcast(podcastId)
+            response.map { it.toModel() }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }
