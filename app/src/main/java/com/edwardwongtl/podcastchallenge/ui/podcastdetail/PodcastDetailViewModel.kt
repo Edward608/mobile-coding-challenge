@@ -1,7 +1,6 @@
 package com.edwardwongtl.podcastchallenge.ui.podcastdetail
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.edwardwongtl.podcastchallenge.data.PodcastRepository
 import dagger.assisted.Assisted
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-@HiltViewModel
+@HiltViewModel(assistedFactory = PodcastDetailViewModel.Factory::class)
 class PodcastDetailViewModel @AssistedInject constructor(
     @Assisted private val podcastId: String,
     private val podcastRepository: PodcastRepository
@@ -37,16 +36,7 @@ class PodcastDetailViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface PodcastDetailViewModelAssistedFactory {
+    interface Factory {
         fun create(podcastId: String): PodcastDetailViewModel
-    }
-
-    class Factory (
-        private val assistedFactory: PodcastDetailViewModelAssistedFactory,
-        private val podcastId: String
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return assistedFactory.create(podcastId) as T
-        }
     }
 }
