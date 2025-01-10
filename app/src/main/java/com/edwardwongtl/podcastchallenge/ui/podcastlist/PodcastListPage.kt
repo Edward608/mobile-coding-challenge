@@ -3,6 +3,7 @@ package com.edwardwongtl.podcastchallenge.ui.podcastlist
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,6 +40,7 @@ import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.test.FakeImage
 import com.edwardwongtl.podcastchallenge.domain.model.PodcastModel
+import com.edwardwongtl.podcastchallenge.ui.theme.FavouritePink
 import com.edwardwongtl.podcastchallenge.ui.theme.PodcastChallengeTheme
 import kotlinx.coroutines.launch
 
@@ -99,6 +101,7 @@ fun PodcastListUI(
         }
 
         LazyColumn(
+            contentPadding = PaddingValues(vertical = 16.dp),
             modifier = modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
@@ -111,7 +114,10 @@ fun PodcastListUI(
             ) { index, podcast ->
                 PodcastListItem(podcast, onClick)
                 if (index < state.podcasts.lastIndex) {
-                    HorizontalDivider()
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                    )
                 }
             }
         }
@@ -125,6 +131,7 @@ fun PodcastListItem(
     modifier: Modifier = Modifier
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick(podcast) }
@@ -139,7 +146,10 @@ fun PodcastListItem(
                 .clip(RoundedCornerShape(8.dp)),
         )
 
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
             Text(
                 text = podcast.title,
                 fontWeight = FontWeight.Bold,
@@ -149,6 +159,12 @@ fun PodcastListItem(
                 text = podcast.publisher,
                 color = Color.LightGray,
                 fontStyle = FontStyle.Italic,
+            )
+
+
+            Text(
+                text = if (podcast.isFavourite) "Favourited" else "",
+                color = FavouritePink,
             )
         }
     }
@@ -164,6 +180,7 @@ private fun PodcastListPreview() {
                 id = "$it",
                 title = "Podcast $it",
                 publisher = "Publisher $it",
+                isFavourite = it % 2 == 1
             )
         }
     )

@@ -32,7 +32,12 @@ class PodcastDetailViewModel @AssistedInject constructor(
     }
 
     fun setFavourite(isFavourite: Boolean) {
-
+        podcastRepository.setFavourite(podcastId, isFavourite)
+        _state.value = _state.value.copy(
+            podcast = _state.value.podcast?.copy(
+                isFavourite = isFavourite
+            )
+        )
     }
 
     @AssistedFactory

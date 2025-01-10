@@ -1,7 +1,5 @@
 package com.edwardwongtl.podcastchallenge.ui.podcastdetail
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +43,7 @@ import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.test.FakeImage
 import com.edwardwongtl.podcastchallenge.R
 import com.edwardwongtl.podcastchallenge.domain.model.PodcastModel
-import com.edwardwongtl.podcastchallenge.ui.theme.ButtonPink
+import com.edwardwongtl.podcastchallenge.ui.theme.FavouritePink
 import com.edwardwongtl.podcastchallenge.ui.theme.PodcastChallengeTheme
 import kotlinx.coroutines.launch
 
@@ -148,14 +146,14 @@ fun PodcastDetailUI(
                 modifier = Modifier
                     .padding(horizontal = 48.dp, vertical = 16.dp)
                     .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(16.dp))
             )
 
             Button(
                 onClick = { setFavourite(!state.podcast.isFavourite) },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ButtonPink
+                    containerColor = FavouritePink
                 )
             ) {
                 Text(
