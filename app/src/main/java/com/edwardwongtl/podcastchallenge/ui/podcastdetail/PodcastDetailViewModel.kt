@@ -3,6 +3,7 @@ package com.edwardwongtl.podcastchallenge.ui.podcastdetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.edwardwongtl.podcastchallenge.data.PodcastRepository
+import com.edwardwongtl.podcastchallenge.domain.model.PodcastModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,15 +14,19 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = PodcastDetailViewModel.Factory::class)
 class PodcastDetailViewModel @AssistedInject constructor(
-    @Assisted private val podcastId: String,
+    @Assisted private val podcast: PodcastModel,
     private val podcastRepository: PodcastRepository
 ) : ViewModel() {
-    init {
-        getPodcastDetail(podcastId)
-    }
-
     private val _state = MutableStateFlow(PodcastDetailState(isLoading = true))
     val state: StateFlow<PodcastDetailState> = _state
+
+    init {
+        // Ignoring detail API for now
+        // getPodcastDetail(podcastId)
+
+        // Use constructor provided value as initial state
+        _state.value = PodcastDetailState(podcast = podcast)
+    }
 
     fun getPodcastDetail(podcastId: String) {
         viewModelScope.launch {
@@ -33,7 +38,7 @@ class PodcastDetailViewModel @AssistedInject constructor(
 
     fun toggleFavourite() {
         val podcast = state.value.podcast ?: return
-        podcastRepository.setFavourite(podcastId, !podcast.isFavourite)
+        podcastRepository.setFavourite(podcast.id, !podcast.isFavourite)
         _state.value = _state.value.copy(
             podcast = podcast.copy(
                 isFavourite = !podcast.isFavourite
@@ -43,6 +48,6 @@ class PodcastDetailViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(podcastId: String): PodcastDetailViewModel
+        fun create(podcast: PodcastModel): PodcastDetailViewModel
     }
 }

@@ -1,7 +1,9 @@
 package com.edwardwongtl.podcastchallenge.domain.model
 
 import com.edwardwongtl.podcastchallenge.data.model.PodcastApiModel
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PodcastModel(
     val id: String = "",
     val rss: String = "",
@@ -32,7 +34,7 @@ data class PodcastModel(
     val updateFrequencyHours: Int = 0,
     val listenScoreGlobalRank: String = "",
     val isFavourite: Boolean = false,
-)
+): java.io.Serializable
 
 fun PodcastApiModel.toModel() = PodcastModel(
     id = id,

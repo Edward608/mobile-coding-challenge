@@ -1,7 +1,9 @@
 package com.edwardwongtl.podcastchallenge.domain.model
 
 import com.edwardwongtl.podcastchallenge.data.model.PodcastExtraApiModel
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PodcastExtraModel(
     val url1: String = "",
     val url2: String = "",
